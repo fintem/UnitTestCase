@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\AppBundle\Test;
+namespace Fintem\UnitTestCase\Traits;
 
 use Exception;
 use ReflectionClass;
