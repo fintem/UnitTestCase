@@ -1,15 +1,12 @@
 {
   "name": "fintem/unit-test-case",
   "description": "Simplified phpunit mocking.",
-  "keywords": [
-    "test",
-    "phpunit"
-  ],
+  "keywords": ["test", "phpunit", "mock"],
   "require": {
     "php": "^7.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "5.7.5"
+    "phpunit/phpunit": "~6.4"
   },
   "autoload": {
     "psr-4": {
