@@ -4,6 +4,7 @@ namespace Fintem\UnitTestCase\Traits;
 
 use Exception;
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Trait BasicMockTrait.
@@ -58,7 +59,14 @@ trait BasicMockTrait
             } else {
                 $className = $parameter->getClass()->name;
                 if (null === $className) {
-                    throw new Exception('Can\'t build mock for parameter "'.$parameterName.'" for "'.$class.'".');
+                    try {
+                        $constructorArgs[] = $parameter->getDefaultValue();
+                        continue;
+                    } catch (ReflectionException $exception) {
+                        throw new \Exception(
+                            'Can\'t build mock for parameter "'.$parameterName.'" for "'.$class.'".', 0, $exception
+                        );
+                    }
                 }
 
                 $constructorArgs[] = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
