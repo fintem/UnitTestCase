@@ -56,6 +56,7 @@ trait BasicMockTrait
             $parameterName = $parameter->name;
             if (array_key_exists($parameter->name, $arguments)) {
                 $constructorArgs[] = $arguments[$parameterName];
+                unset($arguments[$parameterName]);
             } else {
                 $className = $parameter->getClass()->name;
                 if (null === $className) {
@@ -64,13 +65,24 @@ trait BasicMockTrait
                         continue;
                     } catch (ReflectionException $exception) {
                         throw new \Exception(
-                            'Can\'t build mock for parameter "'.$parameterName.'" for "'.$class.'".', 0, $exception
+                            sprintf('Can\'t build mock for parameter "%s" for "%s".', $parameterName, $class),
+                            0,
+                            $exception
                         );
                     }
                 }
 
                 $constructorArgs[] = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
             }
+        }
+        if (!empty($arguments)) {
+            throw new \Exception(
+                sprintf('Non existing argument%s "%s" passed to "%s" mock constructor.',
+                    count($arguments) > 1 ? 's' : '',
+                    implode(', ', array_keys($arguments)),
+                    $class
+                )
+            );
         }
 
         return $constructorArgs;
